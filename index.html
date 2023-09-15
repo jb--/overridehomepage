@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Options</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <section class="section">
+        <div class="container is-fullheight" >
+            <h3 class="title is-3">Select your new Homepage</h3>
+
+            <form id="targetUrlForm">
+                <div class="field has-addons">
+                    <div class="control is-expanded">
+                        <input class="input" class="is-fullwidth" type="text" placeholder="URL" id="targetUrlInput">
+                    </div>
+                    <div class="control">
+                        <button class="button is-primary" type="submit">Set Homepage</button>
+                    </div>
+                </div>
+                <p class="help is-danger is-hidden" id="targetUrlError">Invalid URL</p>
+                <p class="help is-success is-hidden" id="targetUrlSaved">Homepage set</p>
+            </form>
+        </div>
+    </section>
+
+    <script src="index.js"></script>
+</body>
+
+</html>
