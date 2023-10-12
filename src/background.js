@@ -6,7 +6,7 @@ const windowTabClosedEvents = {};
 
 const windowAgeInSeconds = (windowId) => {
   const now = new Date().getTime();
-  const windowCreatedTime = windowStartupEvents[windowId];
+  const windowCreatedTime = windowStartupEvents[windowId] || now;
   const ageInSeconds = (now - windowCreatedTime) / 1000;
   return ageInSeconds;
 }
@@ -34,12 +34,9 @@ const killTheTab = (tab, newPage) => {
 
 
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+chrome.tabs.onCreated.addListener((tab) => {
+  const tabId = tab.id;
   const windowAge = windowAgeInSeconds(tab.windowId);
-  if (!(windowAge > 0)) {
-    console.log("Window is not in windowStartupEvents, not doing anything", tab);
-    return;
-  }
   if (windowAge > maxWindowAge) {
     console.log("Window is too old, not doing anything", tab);
     return;
@@ -63,12 +60,13 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         chrome.tabs.update(tabId, { url: targetUrl }, () => {});
       }
     }
-    const currentTabHostname = new URL(tab.url).hostname;
+    console.log(tab);
+    const currentTabHostname = new URL(tab.pendingUrl).hostname;
     // for every url in the list compare against the current tab - if it matches close it
     urls.forEach((url) => {
       console.log("Comparing", currentTabHostname, url);
       const urlHostname = new URL(url).hostname;
-      if (currentTabHostname === urlHostname && changeInfo.status === 'loading') {
+      if (currentTabHostname === urlHostname) {
         killTheTab(tab, targetUrl);
       }
     });
